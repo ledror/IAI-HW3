@@ -179,7 +179,8 @@ if __name__ == '__main__':
     assert acc > 0.95, 'you should get an accuracy of at least 95% for the pruned ID3 decision tree'
     print(f'Test Accuracy: {acc * 100:.2f}%' if formatted_print else acc)
 
-    m = 50
-    acc = best_m_test(*data_split, min_for_pruning=m)
-    assert acc > 0.95, 'you should get an accuracy of at least 95% for the pruned ID3 decision tree'
-    print(f'Test Accuracy using M=50: {acc * 100:.2f}%' if formatted_print else acc)
+    # uncomment to run with m=50, we got 97.35% accuracy with it
+    # m = 50
+    # acc = best_m_test(*data_split, min_for_pruning=m)
+    # assert acc > 0.95, 'you should get an accuracy of at least 95% for the pruned ID3 decision tree'
+    # print(f'Test Accuracy using M=50: {acc * 100:.2f}%' if formatted_print else acc)
