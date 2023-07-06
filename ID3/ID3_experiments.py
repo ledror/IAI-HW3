@@ -61,10 +61,14 @@ def basic_experiment(x_train, y_train, x_test, y_test, formatted_print=False):
 
     acc = None
 
+    # ====== YOUR CODE: ======
+
     model = ID3(label_names=attributes_names)
     model.fit(x_train, y_train)
     y_pred = model.predict(x_test)
     acc = np.sum(y_test == y_pred) / len(y_test)
+
+    # ========================
 
     assert acc > 0.9, 'you should get an accuracy of at least 90% for the full ID3 decision tree'
     print(f'Test Accuracy: {acc * 100:.2f}%' if formatted_print else acc)
@@ -125,7 +129,12 @@ def best_m_test(x_train, y_train, x_test, y_test, min_for_pruning):
     acc = None
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError
+
+    model = ID3(label_names=attributes_names, min_for_pruning=min_for_pruning)
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    acc = np.sum(y_test == y_pred) / len(y_test)
+
     # ========================
 
     return acc
