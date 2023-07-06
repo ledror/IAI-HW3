@@ -14,7 +14,7 @@ from sklearn.model_selection import KFold
 ========================================================================
 """
 
-ID = 123456789  # TODO: change it to your personal ID
+ID = 209516871  # TODO: change it to your personal ID
 random_gen = RandomState(seed=ID)
 print_formatted_values = False
 
@@ -37,9 +37,7 @@ def accuracy(y: np.array, y_pred: np.array):
     assert y.shape == y_pred.shape
     assert y.ndim == 1
 
-    # ====== YOUR CODE: ======
-    raise NotImplementedError
-    # ========================
+    accuracy_val = np.sum(y == y_pred) / len(y)
 
     return accuracy_val
 
@@ -52,9 +50,9 @@ def load_data_set(clf_type: str):
     """
     assert clf_type in ('ID3', 'KNN'), 'The parameter clf_type must be ID3 or KNN'
     hw_path = str(pathlib.Path(__file__).parent.absolute())
-    dataset_path = hw_path + f"\\{clf_type}-dataset\\"
-    train_file_path = dataset_path + "\\train.csv"
-    test_file_path = dataset_path + "\\test.csv"
+    dataset_path = hw_path + f"/{clf_type}-dataset/"
+    train_file_path = dataset_path + "/train.csv"
+    test_file_path = dataset_path + "/test.csv"
     # Import all columns omitting the fist which consists the names of the attributes
     train_dataset = pd.read_csv(train_file_path)
     test_dataset = pd.read_csv(test_file_path)
