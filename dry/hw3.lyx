@@ -1,0 +1,837 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass heb-article
+\begin_preamble
+% Convert the Lyx colors into more pleasent colors:
+\usepackage{xcolor}
+\definecolor{blue}{RGB}{12,97,197}
+\definecolor{green}{RGB}{0,128,40}
+\definecolor{red}{RGB}{235,16,16}
+\definecolor{brown}{RGB}{154,58,0}
+\definecolor{orange}{RGB}{231,135,26}
+\definecolor{purple}{RGB}{94,53,177}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "David"
+\font_sans "default" "David"
+\font_typewriter "default" "David"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts true
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 3cm
+\headheight 0cm
+\headsep 0cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation 0bp
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Introduction to Artificial Intelligence (236501) | Assignment #3
+\end_layout
+
+\begin_layout Section*
+Part A – MDP
+\end_layout
+
+\begin_layout Subsection*
+(1)
+\end_layout
+
+\begin_layout Subsubsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+\pi:S\rightarrow A\\
+U^{\pi}\left(s\right)=E_{\pi}\left[\sum_{t=0}^{\infty}\gamma^{t}R\left(S_{t},\pi\left(S_{t}\right)\right)|S_{0}=s\right]
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+U\left(s\right)=\max_{a\in A}\left[R\left(s,a\right)+\gamma\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)U\left(s^{\prime}\right)\right]\equiv\max_{a\in A}\left[\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)R\left(s,a\right)+\gamma\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)U\left(s^{\prime}\right)\right]\\
+\equiv\max_{a\in A}\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)\left[R\left(s,a\right)+\gamma U\left(s^{\prime}\right)\right]
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Action-Reward Value Iteration
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+Local Variables:
+\series default
+ 
+\begin_inset Formula $U,U^{\prime},\delta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+Init:
+\series default
+ 
+\begin_inset Formula $U^{\prime}\leftarrow0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+repeat:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+\begin_inset Formula $U\leftarrow U^{\prime},\delta\leftarrow0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+for each
+\series default
+ 
+\begin_inset Formula $state$
+\end_inset
+
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ 
+\series bold
+in
+\series default
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ 
+\series bold
+do:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+\begin_inset Formula $U^{\prime}\left(s\right)\leftarrow\max_{a\in A\left(s\right)}\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)\left[R\left(s,a\right)+\gamma U\left(s^{\prime}\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Formula $\delta=\max\left\{ \delta,\left|U^{\prime}\left(s\right)-U\left(s\right)\right|\right\} $
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout LyX-Code
+
+\series bold
+until
+\series default
+ 
+\begin_inset Formula $\delta<\frac{\epsilon\left(1-\gamma\right)}{\gamma}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+return
+\series default
+ 
+\begin_inset Formula $U$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(d)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Action-Reward Policy Iteration
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+Local Variables:
+\series default
+ 
+\begin_inset Formula $U,\pi$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+Init:
+\series default
+ 
+\begin_inset Formula $\pi\leftarrow Random$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+repeat:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+\begin_inset Formula $U\leftarrow Policy-Evaluation\left(\pi,U,mdp\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Formula $unchanged?\leftarrow true$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+for each
+\series default
+ 
+\begin_inset Formula $state$
+\end_inset
+
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ 
+\series bold
+in
+\series default
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ 
+\series bold
+do:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+
+\series bold
+if
+\series default
+ 
+\begin_inset Formula $\max_{a\in A\left(s\right)}\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)\left[R\left(s,a\right)+\gamma U\left(s^{\prime}\right)\right]>\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,\pi\left[s\right]\right)\left[R\left(s,\pi\left[s\right]\right)+\gamma U\left(s^{\prime}\right)\right]$
+\end_inset
+
+
+\series bold
+ then do:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+\begin_inset Formula $\pi\left[s\right]=\arg\max_{a\in A\left(s\right)}\sum_{s^{\prime}\in S}P\left(s^{\prime}|s,a\right)\left[R\left(s,a\right)+\gamma U\left(s^{\prime}\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Formula $unchanged?\leftarrow false$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout LyX-Code
+
+\series bold
+until
+\series default
+ 
+\begin_inset Formula $unchanged?$
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+return
+\series default
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By using 
+\begin_inset Formula $\gamma=1$
+\end_inset
+
+, there are no diminishing returns on the values we get.
+\end_layout
+
+\begin_layout Standard
+In the Value-Iteration algorithm, the stopping condition will be 0, meaning
+ that we stop only if the all state utilities have converged to the optimal
+ utility.
+\end_layout
+
+\begin_layout Standard
+In the Policy-Iteration algorithm we only care about changes in the policy,
+ therefore the case where 
+\begin_inset Formula $\gamma=1$
+\end_inset
+
+ is similar to the rest.
+\end_layout
+
+\begin_layout Standard
+There are conditions that have to be met in order for the algorithms to
+ find the optimal policy:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\left|S\right|<\infty$
+\end_inset
+
+.
+ If not, the values might diverge to 
+\begin_inset Formula $\infty$
+\end_inset
+
+ and the algorithms won't make sense.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\left|R\right|<\infty$
+\end_inset
+
+ (reward function is bounded).
+\end_layout
+
+\begin_layout Itemize
+no positive cycles.
+ If there are, the utilites will diverge to 
+\begin_inset Formula $\infty$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+(2)
+\end_layout
+
+\begin_layout Subsubsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Incorrect:
+\end_layout
+
+\begin_layout Standard
+Take 
+\begin_inset Formula $\gamma=0.9$
+\end_inset
+
+, 
+\begin_inset Formula $r_{9}=0.9$
+\end_inset
+
+, 
+\begin_inset Formula $r_{6}=1000$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If we try to go up, with probability:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $0.1$
+\end_inset
+
+ we reach the terminal state, granting us 
+\begin_inset Formula $0.9+0.9\cdot1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $0.1$
+\end_inset
+
+ we reach 
+\begin_inset Formula $\left(3,2\right)$
+\end_inset
+
+, granting us at least 
+\begin_inset Formula $0.9+0.9\cdot1000>900$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $0.8$
+\end_inset
+
+ we end up in the same place
+\end_layout
+
+\begin_layout Standard
+Therefore, the optimal utility of 
+\begin_inset Formula $\left(3,3\right)$
+\end_inset
+
+ is at least 
+\begin_inset Formula $0.1\cdot900=90>1$
+\end_inset
+
+, because we found an action that has an expectency of more than 
+\begin_inset Formula $900$
+\end_inset
+
+, while 
+\begin_inset Formula $r_{9}<1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+Incorrect.
+\end_layout
+
+\begin_layout Standard
+We saw in the tutorial that the utilities for the states, in the case where
+ the reward for all non-terminal states is 0, is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename part1-2-b.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+Incorrect.
+ Explanation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $v_{8}$
+\end_inset
+
+ can be smaller than 
+\begin_inset Formula $v_{1}$
+\end_inset
+
+ because it's directly below the 
+\begin_inset Formula $-1$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $r_{1}=r_{2}=...=r_{9}$
+\end_inset
+
+ are arbitrarily close to 0 (yet still negative), they can have as little
+ effect on the utilities as we want.
+\end_layout
+
+\begin_layout Standard
+Therefore the utilities can be as close as we want to the graph in the previous
+ question, in which we see that 
+\begin_inset Formula $v_{1}<v_{8}$
+\end_inset
+
+, for example.
+\end_layout
+
+\begin_layout Subsubsection*
+(d)
+\end_layout
+
+\begin_layout Standard
+Incorrect.
+\end_layout
+
+\begin_layout Standard
+Taking, 
+\begin_inset Formula $v_{4}$
+\end_inset
+
+ and 
+\begin_inset Formula $v_{6}$
+\end_inset
+
+ to 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ (not really 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ but extremely small) will make us never want to go up.
+\end_layout
+
+\begin_layout Subsubsection*
+(e)
+\end_layout
+
+\begin_layout Standard
+With 
+\begin_inset Formula $\gamma=0$
+\end_inset
+
+, the utility of a state is the reward of it.
+\end_layout
+
+\begin_layout Standard
+Therefore, the policy doesn't matter, and every policy is optimal.
+\end_layout
+
+\begin_layout Standard
+A policy is determined by the action on each state.
+ There are 4 actions possible from each non-terminal state so there are
+ 
+\begin_inset Formula $\left|S\backslash S_{G}\right|^{4}$
+\end_inset
+
+ optimal policies.
+\end_layout
+
+\begin_layout Subsubsection*
+(f)
+\end_layout
+
+\begin_layout Standard
+Because there's a discount 
+\begin_inset Formula $\gamma<1$
+\end_inset
+
+, we would never want to reach 
+\begin_inset Formula $\left(1,3\right)$
+\end_inset
+
+ or 
+\begin_inset Formula $\left(2,4\right)$
+\end_inset
+
+ early.
+\end_layout
+
+\begin_layout Standard
+The optimal utilities for these states are the same so the best we can do
+ is delay when we reach either of them, and by doing so reducing their cost
+ (beacuse of 
+\begin_inset Formula $\gamma$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Therefore, an optimal policy is either DOWN or RIGHT.
+\end_layout
+
+\begin_layout Subsubsection*
+(g)
+\end_layout
+
+\begin_layout Standard
+If the optimal policy is to go LEFT:
+\begin_inset Formula 
+\begin{gather*}
+v_{1}=r_{1}+0.9\cdot\gamma\cdot v_{1}+0.1\cdot\gamma\cdot v_{2}\\
+r_{1}=\left(1-0.9\cdot\gamma\right)v_{1}-0.1\cdot\gamma\cdot v_{2}
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+if the optimal policy is to go UP:
+\begin_inset Formula 
+\begin{gather*}
+v_{1}=r_{1}+0.8\cdot\gamma\cdot v_{2}+0.1\cdot\gamma\cdot v_{1}+0.1\cdot\gamma\cdot v_{3}\\
+r_{1}=\left(1-0.1\cdot\gamma\right)v_{1}-\gamma\left(0.8\cdot v_{2}+0.1\cdot v_{3}\right)
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Because 
+\begin_inset Formula $v_{2}>v_{3}$
+\end_inset
+
+, the optimal policy can't be to go DOWN or RIGHT.
+\end_layout
+
+\begin_layout Standard
+Plotting in 
+\begin_inset Formula $\gamma=0,1$
+\end_inset
+
+ in the above equations we get the possible extreme points of 
+\begin_inset Formula $r_{1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{gather*}
+r_{1}=v_{1}\\
+r_{1}=0.1\left(v_{1}-v_{2}\right)\\
+r_{1}=0.9\cdot v_{1}-0.8\cdot v_{2}-0.1\cdot v_{3}>0.1\left(v_{1}-v_{2}\right)
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The upper bound is 
+\begin_inset Formula $v_{1}$
+\end_inset
+
+ and the lower bound is 
+\begin_inset Formula $\min0.1\left(v_{1}-v_{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Part*
+Part B – Intro to Learning
+\end_layout
+
+\begin_layout Section*
+Part A – dry part
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Subsection*
+(d)
+\end_layout
+
+\begin_layout Subsection*
+(e)
+\end_layout
+
+\begin_layout Subsection*
+(f)
+\end_layout
+
+\begin_layout Section*
+Splitting the Fun
+\end_layout
+
+\end_body
+\end_document
