@@ -85,18 +85,22 @@ class ID3:
         #   - If so, add it to 'true rows', otherwise, add it to 'false rows'.
         #   - Calculate the info gain using the `info_gain` method.
 
-        gain, true_rows, true_labels, false_rows, false_labels = None, None, None, None, None
+        true_rows, true_labels, false_rows, false_labels = [], [], [], []
         assert len(rows) == len(labels), 'Rows size should be equal to labels size.'
 
         # ====== YOUR CODE: ======
 
-        true_rows = np.array([row for row in rows if question.match(row)])
-        true_labels = np.array([label for (label, row) in zip(labels, rows) if question.match(row)])
-        false_rows = np.array([row for row in rows if not question.match(row)])
-        false_labels = np.array([label for (label, row) in zip(labels, rows) if not question.match(row)])
-        gain = self.info_gain(true_rows, true_labels, false_rows, false_labels, current_uncertainty)
+        for i, row in enumerate(rows):
+            if question.match(row):
+                true_rows.append(row)
+                true_labels.append(labels[i])
+            else:
+                false_rows.append(row)
+                false_labels.append(labels[i])
 
         # ========================
+
+        gain = self.info_gain(true_rows, true_labels, false_rows, false_labels, current_uncertainty)
 
         return gain, true_rows, true_labels, false_rows, false_labels
 
@@ -118,15 +122,18 @@ class ID3:
 
         # ====== YOUR CODE: ======
 
-        for i in range(rows.shape[1]):
-            sorted_column = sorted(rows[:, i])
-            for threshold in [(sorted_column[j] + sorted_column[j+1]) / 2 for j in range(len(sorted_column) - 1)]:
-                question = Question(self.label_names[i], i, threshold)
+        num_cols = len(rows[0])
+        for col in range(num_cols):
+            col_values = sorted(np.array(rows)[:, col])
+            for i in range(len(col_values) - 1):
+                threshold = (col_values[i] + col_values[i + 1]) / 2
+                question = Question(col_values, col, threshold)
                 gain, true_rows, true_labels, false_rows, false_labels = self.partition(rows, labels, question, current_uncertainty)
-                if gain >= best_gain:
-                    best_gain, best_question = gain, question
-                    best_true_rows, best_true_labels = true_rows, true_labels
+                if gain > best_gain:
+                    best_gain = gain
+                    best_question = question
                     best_false_rows, best_false_labels = false_rows, false_labels
+                    best_true_rows, best_true_labels = true_rows, true_labels
 
         # ========================
 
@@ -148,17 +155,14 @@ class ID3:
         best_question = None
         true_branch, false_branch = None, None
 
-        # ====== YOUR CODE: ======
+        # ====== YOUR CODE: ====== #############
 
-        if len(labels) <= 1:
+        if not self.entropy(rows, labels) or len(labels) <= self.min_for_pruning:
             return Leaf(rows, labels)
         best_gain, best_question, best_true_rows, best_true_labels, best_false_rows, best_false_labels = self.find_best_split(rows, labels)
         if best_gain == 0:
             return Leaf(rows, labels)
-        if best_true_labels is None or len(best_true_labels) <= self.min_for_pruning:
-            return Leaf(rows, labels)
-        if best_false_labels is None or len(best_false_labels) <= self.min_for_pruning:
-            return Leaf(rows, labels)
+        
         true_branch = self.build_tree(best_true_rows, best_true_labels)
         false_branch = self.build_tree(best_false_rows, best_false_labels)
 
@@ -220,8 +224,6 @@ class ID3:
         #  Implement ID3 class prediction for set of data.
 
         # ====== YOUR CODE: ======
-
-        y_pred = None
 
         y_pred = np.array([self.predict_sample(row) for row in rows])
 

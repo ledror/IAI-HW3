@@ -28,9 +28,7 @@ def find_best_pruning_m(train_dataset: np.array, m_choices, num_folds=5):
     """
 
     accuracies = []
-    for i, m in enumerate(m_choices):
-        model = ID3(label_names=attributes_names, min_for_pruning=m)
-        # TODO:
+    for m in m_choices:
         #  - Add a KFold instance of sklearn.model_selection, pass <ID> as random_state argument.
         #  - Train model num_folds times with different train/val data.
         #  Don't use any third-party libraries.
@@ -38,9 +36,16 @@ def find_best_pruning_m(train_dataset: np.array, m_choices, num_folds=5):
         #  (note that then it won't be exactly k-fold CV since it will be a random split each iteration),
         #  or implement something else.
 
-        # ====== YOUR CODE: ======
-        raise NotImplementedError
-        # ========================
+        kf = KFold(n_splits=num_folds, random_state=ID, shuffle=True)
+        folds = create_train_validation_split(train_dataset, kf)
+        acc = []
+        for train, val in folds:
+            x_train, y_train, x_val, y_val = get_dataset_split(train, val, target_attribute)
+            model = ID3(label_names=attributes_names, min_for_pruning=m)
+            model.fit(x_train, y_train)
+            y_pred = model.predict(x_val)
+            acc.append(accuracy(y_val, y_pred))
+        accuracies.append(acc)
 
     best_m_idx = np.argmax([np.mean(acc) for acc in accuracies])
     best_m = m_choices[best_m_idx]
@@ -90,12 +95,15 @@ def cross_validation_experiment(plot_graph=True):
 
     best_m = None
     accuracies = []
-    m_choices = []
+    m_choices = [0, 5, 15, 30, 50]
     num_folds = 5
 
     # ====== YOUR CODE: ======
     assert len(m_choices) >= 5, 'fill the m_choices list with  at least 5 different values for M.'
-    raise NotImplementedError
+    
+    # 
+
+    best_m, accuracies = find_best_pruning_m(train_dataset, m_choices, num_folds)
 
     # ========================
     accuracies_mean = np.array([np.mean(acc) * 100 for acc in accuracies])
@@ -170,3 +178,8 @@ if __name__ == '__main__':
     acc = best_m_test(*data_split, min_for_pruning=best_m)
     assert acc > 0.95, 'you should get an accuracy of at least 95% for the pruned ID3 decision tree'
     print(f'Test Accuracy: {acc * 100:.2f}%' if formatted_print else acc)
+
+    m = 50
+    acc = best_m_test(*data_split, min_for_pruning=m)
+    assert acc > 0.95, 'you should get an accuracy of at least 95% for the pruned ID3 decision tree'
+    print(f'Test Accuracy using M=50: {acc * 100:.2f}%' if formatted_print else acc)
